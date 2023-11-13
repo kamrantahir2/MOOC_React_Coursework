@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from "react";
 
 const Header = (props) => {
   console.log(props);
@@ -30,7 +31,33 @@ const Footer = (props) => {
   );
 };
 
+const Display = ({ counter }) => {
+  return <div>{counter}</div>;
+};
+
 function App() {
+  const [counter, setCounter] = useState(0);
+  console.log("rendering with counter value", counter);
+
+  const incerement = () => {
+    console.log("increasing, value before", counter);
+    setCounter((prev) => (prev += 1));
+  };
+
+  const reset = () => {
+    console.log("resetting to zero, value before", counter);
+    setCounter(0);
+  };
+
+  const decrement = () => {
+    console.log("decreasing, value before", counter);
+    setCounter((prev) => (prev -= 1));
+  };
+
+  const Button = ({ onClick, text }) => {
+    return <button onClick={onClick}>{text}</button>;
+  };
+
   const course = {
     name: "Half Stack application development",
     parts: [
@@ -56,6 +83,12 @@ function App() {
       <Header courses={course.name}></Header>
       <Content course={course} />
       <Footer course={course}></Footer>
+      <Display counter={counter} />
+      <div>
+        <Button onClick={incerement} text="Increment" />
+        <Button onClick={decrement} text="Decrement" />
+        <Button onClick={reset} text="Reset" />
+      </div>
     </div>
   );
 }

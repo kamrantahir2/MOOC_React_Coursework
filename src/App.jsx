@@ -66,19 +66,8 @@ const App = () => {
     setTotal(updatedLeft + right);
   };
 
-  const incerement = () => {
-    console.log("increasing, value before", counter);
-    setCounter(counter + 1);
-  };
-
-  const reset = () => {
-    console.log("resetting to zero, value before", counter);
-    setCounter(0);
-  };
-
-  const decrement = () => {
-    console.log("decreasing, value before", counter);
-    setCounter((prev) => (prev -= 1));
+  const setToValue = (value) => {
+    setCounter(value);
   };
 
   const Button = ({ onClick, text }) => {
@@ -112,9 +101,9 @@ const App = () => {
       <Footer course={course}></Footer>
       <Display counter={counter} />
       <div>
-        <Button onClick={incerement} text="Increment" />
-        <Button onClick={decrement} text="Decrement" />
-        <Button onClick={reset} text="Reset" />
+        <Button onClick={() => setToValue(counter + 1)} text="Increment" />
+        <Button onClick={() => setToValue(counter - 1)} text="Decrement" />
+        <Button onClick={() => setToValue(0)} text="Reset" />
       </div>
       <div>
         {left}

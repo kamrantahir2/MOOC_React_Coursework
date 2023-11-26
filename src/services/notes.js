@@ -6,7 +6,7 @@ const getAll = () => {
 };
 
 const create = (newObject) => {
-  return axios.post(url, newObject);
+  return axios.post(baseUrl, newObject);
 };
 
 const update = (id, newObject) => {

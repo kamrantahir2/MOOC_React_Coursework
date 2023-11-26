@@ -22,7 +22,7 @@
     },
     {
       "content": "a new note...dsadsaddddddd",
-      "important": false,
+      "important": true,
       "id": 5
     },
     {
@@ -37,13 +37,18 @@
     },
     {
       "content": "a new note...dddddd",
-      "important": true,
+      "important": false,
       "id": 8
     },
     {
       "content": "a new note...",
       "important": false,
       "id": 9
+    },
+    {
+      "content": "dsadsa",
+      "important": true,
+      "id": 10
     }
   ]
 }

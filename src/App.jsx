@@ -39,7 +39,11 @@ const App = () => {
       .update(id, changedNote)
       .then((returnedNote) =>
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)))
-      );
+      )
+      .catch((error) => {
+        alert(`the note ${note.content} has already been deleted`);
+        setNotes(notes.filter((n) => n.id !== id));
+      });
   };
 
   useEffect(() => {

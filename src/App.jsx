@@ -60,7 +60,6 @@ const App = () => {
       setNotes(initialNotes);
     });
   }, []);
-  console.log("render", notes.length, "notes");
 
   return (
     <div>

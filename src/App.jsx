@@ -58,6 +58,7 @@ const App = () => {
     console.log("effect");
     noteService.getAll().then((initialNotes) => {
       setNotes(initialNotes);
+      console.log(initialNotes);
     });
   }, []);
 

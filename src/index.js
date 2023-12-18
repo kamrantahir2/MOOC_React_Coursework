@@ -74,6 +74,15 @@ app.post("/api/notes", (request, response) => {
   response.json(note);
 });
 
-const PORT = 3001;
+app.put("/api/notes/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const newNote = request.body;
+  newNote.id = id;
+  notes = notes.map((note) => (note.id !== id ? note : newNote));
+  console.log("Notes", notes);
+  response.json(newNote);
+});
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);

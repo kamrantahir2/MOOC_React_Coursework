@@ -1,10 +1,11 @@
 import http from "http";
 
 import express, { response } from "express";
+import cors from "cors";
 const app = express();
 
 app.use(express.json());
-
+app.use(cors());
 let notes = [
   {
     id: 1,

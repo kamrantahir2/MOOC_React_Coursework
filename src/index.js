@@ -25,11 +25,6 @@ let notes = [
   },
 ];
 
-const generateId = () => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
-  return maxId + 1;
-};
-
 app.get("/api/notes", (request, response) => {
   Note.find({}).then((notes) => {
     response.json(notes);
@@ -37,16 +32,20 @@ app.get("/api/notes", (request, response) => {
 });
 
 app.get("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
+  const id = request.params.id;
   console.log("id", id);
-  const note = notes.find((note) => note.id === id);
-  console.log("found note", note);
-
-  if (note) {
-    response.json(note);
-  } else {
-    response.status(404).end();
-  }
+  Note.findById(id)
+    .then((note) => {
+      if (note) {
+        response.json(note);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      response.status(500).end;
+    });
 });
 
 app.delete("/api/notes/:id", (request, response) => {

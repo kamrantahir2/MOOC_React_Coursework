@@ -16,10 +16,18 @@ const url = `mongodb+srv://kamrantahir117:${password}@cluster0.qkxhsol.mongodb.n
 mongoose.set("strictQuery", false);
 mongoose.connect(url);
 
-const noteSchema = {
+const noteSchema = new mongoose.Schema({
   content: String,
   important: Boolean,
-};
+});
+
+noteSchema.set("toJson", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
 
 const Note = mongoose.model("note", noteSchema);
 

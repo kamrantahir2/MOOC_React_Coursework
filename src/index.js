@@ -3,9 +3,9 @@ import cors from "cors";
 import Note from "./models/note.js";
 const app = express();
 
+app.use(express.static("dist"));
 app.use(express.json());
 app.use(cors());
-app.use(express.static("dist"));
 
 let notes = [
   {
@@ -25,35 +25,6 @@ let notes = [
   },
 ];
 
-app.get("/api/notes", (request, response) => {
-  Note.find({}).then((notes) => {
-    response.json(notes);
-  });
-});
-
-app.get("/api/notes/:id", (request, response) => {
-  const id = request.params.id;
-  console.log("id", id);
-  Note.findById(id)
-    .then((note) => {
-      if (note) {
-        response.json(note);
-      } else {
-        response.status(404).end();
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      response.status(500).end;
-    });
-});
-
-app.delete("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter((note) => note.id !== id);
-  response.status(204).end();
-});
-
 app.post("/api/notes", (request, response) => {
   const body = request.body;
   if (!body.content) {
@@ -72,6 +43,47 @@ app.post("/api/notes", (request, response) => {
   });
 });
 
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+  next(error);
+};
+
+app.use(errorHandler);
+
+app.get("/api/notes", (request, response) => {
+  Note.find({}).then((notes) => {
+    response.json(notes);
+  });
+});
+
+app.get("/api/notes/:id", (request, response, next) => {
+  const id = request.params.id;
+  console.log("id", id);
+  Note.findById(id)
+    .then((note) => {
+      if (note) {
+        response.json(note);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      // console.log(error);
+      // response.status(500).send({ error: "Malformatted ID" });
+      next(error);
+    });
+});
+
+app.delete("/api/notes/:id", (request, response) => {
+  const id = Number(request.params.id);
+  notes = notes.filter((note) => note.id !== id);
+  response.status(204).end();
+});
+
 app.put("/api/notes/:id", (request, response) => {
   const id = Number(request.params.id);
   const newNote = request.body;
@@ -80,6 +92,12 @@ app.put("/api/notes/:id", (request, response) => {
   console.log("Notes", notes);
   response.json(newNote);
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT);

@@ -78,19 +78,27 @@ app.get("/api/notes/:id", (request, response, next) => {
     });
 });
 
-app.delete("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter((note) => note.id !== id);
-  response.status(204).end();
+app.delete("/api/notes/:id", (request, response, next) => {
+  Note.findByIdAndDelete(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
-app.put("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const newNote = request.body;
-  newNote.id = id;
-  notes = notes.map((note) => (note.id !== id ? note : newNote));
-  console.log("Notes", notes);
-  response.json(newNote);
+app.put("/api/notes/:id", (request, response, next) => {
+  const body = request.body;
+
+  const note = {
+    content: body.content,
+    important: body.important,
+  };
+
+  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+    .then((updatedNote) => {
+      response.json(updatedNote);
+    })
+    .catch((error) => next);
 });
 
 const unknownEndpoint = (request, response) => {

@@ -2,7 +2,26 @@ import http from "http";
 
 import express, { response } from "express";
 import cors from "cors";
+import mongoose from "mongoose";
+
+import dotenv from "dotenv";
+
 const app = express();
+dotenv.config();
+
+const password = process.env.PASSWORD;
+
+const url = `mongodb+srv://kamrantahir117:${password}@cluster0.qkxhsol.mongodb.net/noteApp?retryWrites=true&w=majority`;
+
+mongoose.set("strictQuery", false);
+mongoose.connect(url);
+
+const noteSchema = {
+  content: String,
+  important: Boolean,
+};
+
+const Note = mongoose.model("note", noteSchema);
 
 app.use(express.json());
 app.use(cors());
@@ -32,7 +51,9 @@ const generateId = () => {
 };
 
 app.get("/api/notes", (request, response) => {
-  response.json(notes);
+  Note.find({}).then((notes) => {
+    response.json(notes);
+  });
 });
 
 app.get("/api/notes/:id", (request, response) => {

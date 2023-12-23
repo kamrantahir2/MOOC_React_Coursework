@@ -1,35 +1,7 @@
-import http from "http";
-
 import express, { response } from "express";
 import cors from "cors";
-import mongoose from "mongoose";
-
-import dotenv from "dotenv";
-
+import Note from "./models/note.js";
 const app = express();
-dotenv.config();
-
-const password = process.env.PASSWORD;
-
-const url = `mongodb+srv://kamrantahir117:${password}@cluster0.qkxhsol.mongodb.net/noteApp?retryWrites=true&w=majority`;
-
-mongoose.set("strictQuery", false);
-mongoose.connect(url);
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-});
-
-noteSchema.set("toJson", {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-});
-
-const Note = mongoose.model("note", noteSchema);
 
 app.use(express.json());
 app.use(cors());

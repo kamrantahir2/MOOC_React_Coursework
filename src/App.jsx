@@ -35,14 +35,17 @@ const App = () => {
     : notes.filter((note) => note.important === true);
 
   const toggleImportanceOf = (id) => {
-    const note = notes.find((n) => n.id === id);
+    const note = notes.find((n) => n._id === id);
     const changedNote = { ...note, important: !note.important };
 
     noteService
       .update(id, changedNote)
-      .then((returnedNote) =>
-        setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)))
-      )
+      .then(() => {
+        noteService.getAll().then((initialNotes) => {
+          setNotes(initialNotes);
+          console.log(initialNotes);
+        });
+      })
       .catch((error) => {
         setErrorMessage(
           `Note ${note.content} was already removed from the server`
@@ -52,6 +55,7 @@ const App = () => {
         }, 5000);
         setNotes(notes.filter((n) => n.id !== id));
       });
+    console.log(notes);
   };
 
   useEffect(() => {
@@ -72,13 +76,15 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map((note) => (
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
-          />
-        ))}
+        {notesToShow.map((note) => {
+          return (
+            <Note
+              key={note._id}
+              note={note}
+              toggleImportance={() => toggleImportanceOf(note._id)}
+            />
+          );
+        })}
       </ul>
 
       <div>

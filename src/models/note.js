@@ -1,16 +1,10 @@
+/* eslint-disable no-undef */
 import mongoose from "mongoose";
-
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const password = process.env.PASSWORD;
-
-const url = `mongodb+srv://kamrantahir117:${password}@cluster0.qkxhsol.mongodb.net/noteApp?retryWrites=true&w=majority`;
+import config from "../utils/config.js";
 
 mongoose.set("strictQuery", false);
 mongoose
-  .connect(url)
+  .connect(config.url)
   .then(console.log("Connected to MongoDB"))
   .catch((error) => console.log("Error connecting to MongoDB:", error));
 

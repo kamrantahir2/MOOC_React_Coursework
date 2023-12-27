@@ -1,7 +1,8 @@
+/* eslint-disable react/react-in-jsx-scope */
 import "./App.css";
 import { useState, useEffect } from "react";
 import Note from "./components/Note";
-import axios from "axios";
+// import axios from "axios";
 import noteService from "./services/notes";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
@@ -46,7 +47,7 @@ const App = () => {
           console.log(initialNotes);
         });
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(
           `Note ${note.content} was already removed from the server`
         );

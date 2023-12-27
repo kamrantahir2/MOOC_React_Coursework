@@ -1,7 +1,11 @@
+/* eslint-disable no-undef */
 import express from "express";
 import cors from "cors";
 import Note from "./models/note.js";
 const app = express();
+import config from "./utils/config.js";
+
+console.log(config);
 
 app.use(express.static("dist"));
 app.use(express.json());
@@ -20,31 +24,8 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler);
 
-// let notes = [
-//   {
-//     id: 1,
-//     content: "HTML is easy",
-//     important: true,
-//   },
-//   {
-//     id: 2,
-//     content: "Browser can execute only JavaScript",
-//     important: false,
-//   },
-//   {
-//     id: 3,
-//     content: "GET and POST are the most important methods of HTTP protocol",
-//     important: true,
-//   },
-// ];
-
 app.post("/api/notes", (request, response, next) => {
   const body = request.body;
-  // if (!body.content) {
-  //   return response.status(400).json({
-  //     error: "content missing",
-  //   });
-  // }
 
   const note = new Note({
     content: body.content,
@@ -77,8 +58,6 @@ app.get("/api/notes/:id", (request, response, next) => {
       }
     })
     .catch((error) => {
-      // console.log(error);
-      // response.status(500).send({ error: "Malformatted ID" });
       next(error);
     });
 });
@@ -93,11 +72,6 @@ app.delete("/api/notes/:id", (request, response, next) => {
 
 app.put("/api/notes/:id", (request, response, next) => {
   const { content, important } = request.body;
-
-  // const note = {
-  //   content: body.content,
-  //   important: body.important,
-  // };
 
   Note.findByIdAndUpdate(
     request.params.id,
@@ -116,6 +90,5 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT);
-console.log(`Server running on port ${PORT}`);
+app.listen(config.PORT);
+console.log(`Server running on port ${config.PORT}`);

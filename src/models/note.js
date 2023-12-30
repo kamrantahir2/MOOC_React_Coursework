@@ -2,12 +2,6 @@
 import mongoose from "mongoose";
 import config from "../utils/config.js";
 
-mongoose.set("strictQuery", false);
-mongoose
-  .connect(config.url)
-  .then(console.log("Connected to MongoDB"))
-  .catch((error) => console.log("Error connecting to MongoDB:", error));
-
 const noteSchema = new mongoose.Schema({
   content: {
     type: String,

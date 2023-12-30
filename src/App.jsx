@@ -3,7 +3,7 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import Note from "./components/Note";
 // import axios from "axios";
-import noteService from "./services/notes";
+import noteService from "./services/notes.js";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 

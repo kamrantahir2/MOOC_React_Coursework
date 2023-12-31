@@ -37,5 +37,8 @@
     "json-server": "^0.17.4",
     "nodemon": "^3.0.2",
     "vite": "^4.4.5"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

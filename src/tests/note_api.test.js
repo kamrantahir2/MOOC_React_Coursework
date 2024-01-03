@@ -3,7 +3,7 @@ import supertest from "supertest";
 import app from "../app.js";
 import Note from "../models/note.js";
 const api = supertest(app);
-import helper from "./test_helped.js";
+import helper from "./test_helper.js";
 
 beforeEach(async () => {
   await Note.deleteMany({});

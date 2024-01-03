@@ -9,16 +9,22 @@ notesRouter.get("/", (request, response) => {
   });
 });
 
-notesRouter.get("/:id", (request, response, next) => {
-  Note.findById(request.params.id)
-    .then((note) => {
-      if (note) {
-        response.json(note);
-      } else {
-        response.status(404).end();
-      }
-    })
-    .catch((error) => next(error));
+notesRouter.get("/:id", async (request, response, next) => {
+  // Note.findById(request.params.id)
+  //   .then((note) => {
+  //     if (note) {
+  //       response.json(note);
+  //     } else {
+  //       response.status(404).end();
+  //     }
+  //   })
+  //   .catch((error) => next(error));
+  try {
+    const notes = await Note.find({});
+    response.json(notes);
+  } catch (error) {
+    next(error);
+  }
 });
 
 notesRouter.post("/", (request, response, next) => {
@@ -32,7 +38,7 @@ notesRouter.post("/", (request, response, next) => {
   note
     .save()
     .then((savedNote) => {
-      response.json(savedNote);
+      response.status(201).json(savedNote);
     })
     .catch((error) => next(error));
 });

@@ -1,4 +1,5 @@
-const average = require("../utils/for_testing").average;
+import forTesting from "../utils/for_testing.js";
+const average = forTesting.average;
 
 describe("average", () => {
   test("of value is the value itself", () => {

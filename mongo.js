@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const url = `mongodb+srv://kamrantahir117:${process.env.PASSWORD}@cluster0.qkxhsol.mongodb.net/noteApp?retryWrites=true&w=majority`;
+const url = process.env.TEST_MONGODB_URI;
 
 mongoose.set("strictQuery", false);
 mongoose.connect(url);

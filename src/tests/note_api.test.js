@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import supertest from "supertest";
+import "express-async-errors";
 import app from "../app.js";
 import Note from "../models/note.js";
 const api = supertest(app);

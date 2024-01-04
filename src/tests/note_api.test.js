@@ -62,10 +62,8 @@ test("note without content is not added", async () => {
 
 test("a specific note can be viewed", async () => {
   const notesAtStart = await helper.notesInDb();
-  //   console.log("notesAtStart = ", notesAtStart);
   const noteToView = notesAtStart[0];
 
-  console.log("ID = ", noteToView);
   noteToView._id = noteToView._id.toString();
 
   const resultNote = await api
@@ -73,9 +71,22 @@ test("a specific note can be viewed", async () => {
     .expect(200)
     .expect("Content-Type", /application\/json/);
 
-  console.log("resultNote: ", resultNote.body);
-
   expect(resultNote.body).toEqual(noteToView);
+});
+
+test("a note can be deleted", async () => {
+  const notesAtStart = await helper.notesInDb();
+  const noteToDelete = notesAtStart[0];
+
+  await api.delete(`/api/notes/${noteToDelete._id}`).expect(204);
+
+  const notesAtEnd = await helper.notesInDb();
+
+  expect(notesAtEnd).toHaveLength(helper.initialNotes.length - 1);
+
+  const contents = notesAtEnd.map((r) => r.content);
+
+  expect(contents).not.toContain(noteToDelete.content);
 });
 
 afterAll(async () => {

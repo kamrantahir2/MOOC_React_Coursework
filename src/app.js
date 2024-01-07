@@ -6,6 +6,7 @@ import logger from "./utils/logger.js";
 import middleware from "./utils/middleware.js";
 import cors from "cors";
 import mongoose from "mongoose";
+import usersRouter from "./controllers/users.js";
 
 mongoose.set("strictQuery", false);
 
@@ -19,6 +20,7 @@ app.use(express.static("dist"));
 app.use(express.json());
 app.use(middleware.requestLogger);
 app.use("/api/notes", notesRouter);
+app.use("/api/users", usersRouter);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 

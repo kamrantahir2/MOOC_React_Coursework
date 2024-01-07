@@ -4,7 +4,7 @@ const usersRouter = express.Router();
 import User from "../models/user.js";
 import "express-async-errors";
 
-usersRouter.get("/", async () => {
+usersRouter.get("/", async (request, response) => {
   const users = await User.find({});
   response.json(users);
 });

@@ -23,6 +23,6 @@ noteSchema.set("toJson", {
   },
 });
 
-const Note = mongoose.model("note", noteSchema);
+const Note = mongoose.model("Note", noteSchema);
 
 export default Note;

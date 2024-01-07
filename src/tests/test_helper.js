@@ -1,4 +1,5 @@
 import Note from "../models/note";
+import User from "../models/user";
 
 const initialNotes = [
   {
@@ -10,6 +11,11 @@ const initialNotes = [
     important: true,
   },
 ];
+
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map((u) => u.toJSON());
+};
 
 const nonExistingId = async () => {
   const note = new Note({ content: "willremovethissoon" });
@@ -24,4 +30,4 @@ const notesInDb = async () => {
   return notes.map((note) => note.toJSON());
 };
 
-export default { initialNotes, nonExistingId, notesInDb };
+export default { initialNotes, nonExistingId, notesInDb, usersInDb };

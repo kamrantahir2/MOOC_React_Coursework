@@ -2,6 +2,12 @@ import bcrypt from "bcrypt";
 import express from "express";
 const usersRouter = express.Router();
 import User from "../models/user.js";
+import "express-async-errors";
+
+usersRouter.get("/", async () => {
+  const users = await User.find({});
+  response.json(users);
+});
 
 usersRouter.post("/", async (request, response) => {
   const { username, name, password } = request.body;

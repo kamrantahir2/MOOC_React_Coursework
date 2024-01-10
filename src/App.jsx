@@ -2,7 +2,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import Note from "./components/Note";
-// import axios from "axios";
+import login from "./services/login.js";
 import noteService from "./services/notes.js";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
@@ -14,6 +14,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     console.log("effect");
@@ -23,9 +24,20 @@ const App = () => {
     });
   }, []);
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    console.log("logging in with", username, password);
+    try {
+      const user = await login({ username, password });
+
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      setErrorMessage("Wrong Credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
   };
 
   const addNote = (event) => {
@@ -74,10 +86,8 @@ const App = () => {
     console.log(notes);
   };
 
-  return (
-    <div>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
+  const loginForm = () => {
+    return (
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -99,6 +109,26 @@ const App = () => {
         </div>
         <button type="submit">login</button>
       </form>
+    );
+  };
+
+  const noteForm = () => {
+    return (
+      <div>
+        <form onSubmit={addNote}>
+          <input value={newNote} onChange={handleNoteChange} />
+          <button type="submit">Save</button>
+        </form>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <Notification message={errorMessage} />
+      {user === null && loginForm()}
+      {user !== null && noteForm()}
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
@@ -116,12 +146,6 @@ const App = () => {
         })}
       </ul>
 
-      <div>
-        <form onSubmit={addNote}>
-          <input value={newNote} onChange={handleNoteChange} />
-          <button type="submit">Save</button>
-        </form>
-      </div>
       <Footer />
     </div>
   );

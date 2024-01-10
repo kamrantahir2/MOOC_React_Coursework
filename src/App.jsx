@@ -6,8 +6,10 @@ import login from "./services/login.js";
 import noteService from "./services/notes.js";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
+import LoginForm from "./components/LoginForm.jsx";
 
 const App = () => {
+  const [loginVisible, setLoginVisible] = useState(false);
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("a new note...");
   const [showAll, setShowAll] = useState(true);
@@ -99,28 +101,24 @@ const App = () => {
   };
 
   const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? "none" : "" };
+    const showWhenVisible = { display: loginVisible ? "" : "none" };
+
     return (
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>Log in</button>
         </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
           />
+          <button onClick={() => setLoginVisible(false)}>Cancel</button>
         </div>
-        <button type="submit">login</button>
-      </form>
+      </div>
     );
   };
 

@@ -115,6 +115,7 @@ const App = () => {
             password={password}
             handleUsernameChange={({ target }) => setUsername(target.value)}
             handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleLogin={handleLogin}
           />
           <button onClick={() => setLoginVisible(false)}>Cancel</button>
         </div>

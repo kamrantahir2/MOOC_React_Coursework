@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Note from "./components/Note";
 import login from "./services/login.js";
 import noteService from "./services/notes.js";
@@ -13,7 +13,6 @@ import Togglable from "./components/Togglable.jsx";
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState("a new note...");
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
@@ -56,23 +55,17 @@ const App = () => {
     }
   };
 
-  const addNote = (event) => {
-    event.preventDefault();
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    };
-
+  const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility();
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
-      setNewNote("");
     });
   };
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value);
-    setNewNote(event.target.value);
-  };
+  // const handleNoteChange = (event) => {
+  //   console.log(event.target.value);
+  //   setNewNote(event.target.value);
+  // };
 
   const notesToShow = showAll
     ? notes
@@ -124,15 +117,12 @@ const App = () => {
       </div>
     );
   };
+  const noteFormRef = useRef();
 
   const noteForm = () => {
     return (
-      <Togglable buttonLabel="New Note">
-        <NoteForm
-          onSubmit={addNote}
-          value={newNote}
-          handleChange={handleNoteChange}
-        />
+      <Togglable buttonLabel="New Note" ref={noteFormRef}>
+        <NoteForm createNote={addNote} />
       </Togglable>
     );
   };
@@ -158,7 +148,7 @@ const App = () => {
           );
         })}
       </ul>
-
+      <button onClick={() => setUser(null)}>Logout</button>
       <Footer />
     </div>
   );

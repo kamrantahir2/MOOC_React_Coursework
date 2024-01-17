@@ -61,12 +61,6 @@ const App = () => {
       setNotes(notes.concat(returnedNote));
     });
   };
-
-  // const handleNoteChange = (event) => {
-  //   console.log(event.target.value);
-  //   setNewNote(event.target.value);
-  // };
-
   const notesToShow = showAll
     ? notes
     : notes.filter((note) => note.important === true);

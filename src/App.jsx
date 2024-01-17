@@ -121,6 +121,16 @@ const App = () => {
     );
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedNoteappUser");
+    noteService.setToken(null);
+    setUser(null);
+  };
+
+  if (user === null) {
+    return loginForm();
+  }
+
   return (
     <div>
       <h1>Notes</h1>
@@ -142,7 +152,7 @@ const App = () => {
           );
         })}
       </ul>
-      <button onClick={() => setUser(null)}>Logout</button>
+      <button onClick={handleLogout}>Logout</button>
       <Footer />
     </div>
   );

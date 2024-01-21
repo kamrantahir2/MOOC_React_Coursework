@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
-import Note from "./components/Note";
+import { Note } from "./components/Note";
 import login from "./services/login.js";
 import noteService from "./services/notes.js";
 import Notification from "./components/Notification";

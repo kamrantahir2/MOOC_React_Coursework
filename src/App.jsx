@@ -8,7 +8,7 @@ import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm.jsx";
 import NoteForm from "./components/NoteForm.jsx";
-import Togglable from "./components/Togglable.jsx";
+import { Togglable } from "./components/Togglable.jsx";
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);

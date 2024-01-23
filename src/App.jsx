@@ -7,7 +7,7 @@ import noteService from "./services/notes.js";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm.jsx";
-import NoteForm from "./components/NoteForm.jsx";
+import { NoteForm } from "./components/NoteForm.jsx";
 import { Togglable } from "./components/Togglable.jsx";
 
 const App = () => {

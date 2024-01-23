@@ -24,4 +24,13 @@ describe("<Togglable />", () => {
     const div = container.querySelector(".togglableContent");
     expect(div).toHaveStyle("display: none");
   });
+
+  test("after clicking the button the children are displayed", async () => {
+    const user = userEvent.setup();
+    const button = screen.getByText("show...");
+    await user.click(button);
+
+    const div = container.querySelector(".togglableContent");
+    expect(div).not.toHaveStyle("display: none");
+  });
 });

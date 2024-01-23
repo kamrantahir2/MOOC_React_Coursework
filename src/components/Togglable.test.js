@@ -19,4 +19,9 @@ describe("<Togglable />", () => {
   test("renders its children", async () => {
     await screen.findAllByText("togglable content");
   });
+
+  test("at start the children are not displayed", () => {
+    const div = container.querySelector(".togglableContent");
+    expect(div).toHaveStyle("display: none");
+  });
 });

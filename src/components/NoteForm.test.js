@@ -11,7 +11,7 @@ test("<NoteForm /> updates paretn state and calls onSubmit", async () => {
 
   render(<NoteForm createNote={createNote} />);
 
-  const input = screen.getByRole("textbox");
+  const input = screen.getByPlaceholderText("write note content here");
   const sendButton = screen.getByText("Save");
 
   await user.type(input, "testing a form...");

@@ -33,6 +33,10 @@ store.dispatch({
   },
 });
 
+const generateId = () => {
+  return Number((Math.random() * 1000000).toFixed(0));
+};
+
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
   const [notes, setNotes] = useState([]);
@@ -78,12 +82,35 @@ const App = () => {
     }
   };
 
-  const addNote = (noteObject) => {
-    noteFormRef.current.toggleVisibility();
-    noteService.create(noteObject).then((returnedNote) => {
-      setNotes(notes.concat(returnedNote));
+  // const addNote = (noteObject) => {
+  //   noteFormRef.current.toggleVisibility();
+  //   noteService.create(noteObject).then((returnedNote) => {
+  //     setNotes(notes.concat(returnedNote));
+  //   });
+  // };
+
+  const addNote = (event) => {
+    event.preventDefault();
+    const content = event.target.note.value;
+    event.target.note.value = "";
+    store.dispatch({
+      type: "NEW_NOTE",
+      payload: {
+        content,
+        important: false,
+        id: generateId(),
+      },
+    });
+    console.log(store.getState());
+  };
+
+  const toggleImportance = (id) => {
+    store.dispatch({
+      type: "TOGGLE_IMPORTANCE",
+      payload: { id },
     });
   };
+
   const notesToShow = showAll
     ? notes
     : notes.filter((note) => note.important === true);
@@ -164,7 +191,18 @@ const App = () => {
           show {showAll ? "important" : "all"}
         </button>
       </div>
+      <form onSubmit={addNote}>
+        <input name="note" />
+        <button type="submit">add</button>
+      </form>
       <ul>
+        {store.getState().map((note) => (
+          <li key={note.id} onClick={() => toggleImportance(note.id)}>
+            {note.content} <strong>{note.important ? "important" : ""}</strong>
+          </li>
+        ))}
+      </ul>
+      {/* <ul>
         {notesToShow.map((note) => {
           return (
             <Note
@@ -174,7 +212,7 @@ const App = () => {
             />
           );
         })}
-      </ul>
+      </ul> */}
       <button onClick={handleLogout}>Logout</button>
       <Footer />
     </div>

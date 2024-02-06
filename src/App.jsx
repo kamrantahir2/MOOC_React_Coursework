@@ -37,6 +37,24 @@ const generateId = () => {
   return Number((Math.random() * 1000000).toFixed(0));
 };
 
+const createNote = (content) => {
+  return {
+    type: "NEW_NOTE",
+    payload: {
+      content,
+      important: false,
+      id: generateId(),
+    },
+  };
+};
+
+const toggleImportanceOf = (id) => {
+  return {
+    type: "TOGGLE_IMPORTANCE",
+    payload: { id },
+  };
+};
+
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
   const [notes, setNotes] = useState([]);
@@ -93,51 +111,41 @@ const App = () => {
     event.preventDefault();
     const content = event.target.note.value;
     event.target.note.value = "";
-    store.dispatch({
-      type: "NEW_NOTE",
-      payload: {
-        content,
-        important: false,
-        id: generateId(),
-      },
-    });
+    store.dispatch(createNote(content));
     console.log(store.getState());
   };
 
   const toggleImportance = (id) => {
-    store.dispatch({
-      type: "TOGGLE_IMPORTANCE",
-      payload: { id },
-    });
+    store.dispatch(toggleImportanceOf(id));
   };
 
   const notesToShow = showAll
     ? notes
     : notes.filter((note) => note.important === true);
 
-  const toggleImportanceOf = (id) => {
-    const note = notes.find((n) => n._id === id);
-    const changedNote = { ...note, important: !note.important };
+  // const toggleImportanceOf = (id) => {
+  //   const note = notes.find((n) => n._id === id);
+  //   const changedNote = { ...note, important: !note.important };
 
-    noteService
-      .update(id, changedNote)
-      .then(() => {
-        noteService.getAll().then((initialNotes) => {
-          setNotes(initialNotes);
-          console.log(initialNotes);
-        });
-      })
-      .catch(() => {
-        setErrorMessage(
-          `Note ${note.content} was already removed from the server`
-        );
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
-        setNotes(notes.filter((n) => n.id !== id));
-      });
-    console.log(notes);
-  };
+  //   noteService
+  //     .update(id, changedNote)
+  //     .then(() => {
+  //       noteService.getAll().then((initialNotes) => {
+  //         setNotes(initialNotes);
+  //         console.log(initialNotes);
+  //       });
+  //     })
+  //     .catch(() => {
+  //       setErrorMessage(
+  //         `Note ${note.content} was already removed from the server`
+  //       );
+  //       setTimeout(() => {
+  //         setErrorMessage(null);
+  //       }, 5000);
+  //       setNotes(notes.filter((n) => n.id !== id));
+  //     });
+  //   console.log(notes);
+  // };
 
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? "none" : "" };

@@ -4,15 +4,23 @@ import App from "./App.jsx";
 import "./index.css";
 import { useState } from "react";
 import axios from "axios";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
 
-import noteReducer from "./reducers/noteReducer.js";
+// const notes = [
+//   {
+//     id: 1,
+//     content: "HTML is easy",
+//     important: true,
+//   },
+//   {
+//     id: 2,
+//     content: "Browser can execute only JavaScript",
+//     important: false,
+//   },
+//   {
+//     id: 3,
+//     content: "GET and POST are the most important methods of HTTP protocol",
+//     important: true,
+//   },
+// ];
 
-const store = createStore(noteReducer);
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);

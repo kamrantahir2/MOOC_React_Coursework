@@ -9,13 +9,20 @@ import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm.jsx";
 import { NoteForm } from "./components/NoteForm.jsx";
 import { Togglable } from "./components/Togglable.jsx";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ user }) => {
   return (
     <div>
       <h2>Notes App</h2>
+      <h3>Logged in as {user}</h3>
     </div>
   );
 };
@@ -74,10 +81,8 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // console.log("effect");
     noteService.getAll().then((initialNotes) => {
       setNotes(initialNotes);
-      // console.log(initialNotes);
     });
   }, []);
 
@@ -215,6 +220,14 @@ const App = () => {
     padding: 5,
   };
 
+  const userLogin = async () => {
+    const navigate = useNavigate();
+
+    await handleLogin();
+
+    navigate("/");
+  };
+
   return (
     <Router>
       <div>
@@ -227,6 +240,13 @@ const App = () => {
         <Link style={padding} to="/users">
           Users
         </Link>
+        {user ? (
+          <em>{user.username} logged in</em>
+        ) : (
+          <Link style={padding} to="/login">
+            Login
+          </Link>
+        )}
       </div>
 
       <Routes>
@@ -235,8 +255,20 @@ const App = () => {
           path="/notes"
           element={<Notes notes={notes} setNotes={setNotes} />}
         />
+        <Route
+          path="/login"
+          element={
+            <LoginForm
+              username={username}
+              password={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+              handleLogin={userLogin}
+            />
+          }
+        />
         <Route path="/users" element={<Users />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home user={user.username} />} />
       </Routes>
       <button onClick={handleLogout}>Logout</button>
     </Router>

@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
-import { Note } from "./components/Note";
+// import { Note } from "./components/Note";
 import login from "./services/login.js";
 import noteService from "./services/notes.js";
 import Notification from "./components/Notification";
@@ -9,6 +9,60 @@ import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm.jsx";
 import { NoteForm } from "./components/NoteForm.jsx";
 import { Togglable } from "./components/Togglable.jsx";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+const Home = () => {
+  return (
+    <div>
+      <h2>Notes App</h2>
+    </div>
+  );
+};
+
+const Note = ({ notes }) => {
+  const { id } = useParams();
+  const note = notes.find((n) => n._id === id);
+  return (
+    <div>
+      <h2>{note.content}</h2>
+      <div>{note.user.username}</div>
+      <div>
+        <strong>{note.important ? "important" : ""}</strong>
+      </div>
+    </div>
+  );
+};
+
+const Notes = ({ notes, setNotes }) => {
+  useEffect(() => {
+    noteService.getAll().then((initialNotes) => {
+      setNotes(initialNotes);
+    });
+  }, []);
+  return (
+    <div>
+      <h2>Notes</h2>
+      <ul>
+        {notes.map((note) => {
+          return (
+            <li key={note._id}>
+              <Link to={`/notes/${note._id}`}>{note.content}</Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+const Users = () => {
+  return (
+    <div>
+      <h2>Users</h2>
+    </div>
+  );
+};
 
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -20,10 +74,10 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log("effect");
+    // console.log("effect");
     noteService.getAll().then((initialNotes) => {
       setNotes(initialNotes);
-      console.log(initialNotes);
+      // console.log(initialNotes);
     });
   }, []);
 
@@ -131,30 +185,61 @@ const App = () => {
     return loginForm();
   }
 
+  // return (
+  //   <div>
+  //     <h1>Notes</h1>
+  //     <Notification message={errorMessage} />
+  //     {user === null ? loginForm() : noteForm()}
+  //     <div>
+  //       <button onClick={() => setShowAll(!showAll)}>
+  //         show {showAll ? "important" : "all"}
+  //       </button>
+  //     </div>
+  //     <ul>
+  //       {notesToShow.map((note) => {
+  //         return (
+  //           <Note
+  //             key={note._id}
+  //             note={note}
+  //             toggleImportance={() => toggleImportanceOf(note._id)}
+  //           />
+  //         );
+  //       })}
+  //     </ul>
+  // <button onClick={handleLogout}>Logout</button>
+  //     <Footer />
+  //   </div>
+  // );
+
+  const padding = {
+    padding: 5,
+  };
+
   return (
-    <div>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
-      {user === null ? loginForm() : noteForm()}
+    <Router>
       <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? "important" : "all"}
-        </button>
+        <Link style={padding} to="/">
+          Home
+        </Link>{" "}
+        <Link style={padding} to="/notes">
+          Notes
+        </Link>{" "}
+        <Link style={padding} to="/users">
+          Users
+        </Link>
       </div>
-      <ul>
-        {notesToShow.map((note) => {
-          return (
-            <Note
-              key={note._id}
-              note={note}
-              toggleImportance={() => toggleImportanceOf(note._id)}
-            />
-          );
-        })}
-      </ul>
+
+      <Routes>
+        <Route path="/notes/:id" element={<Note notes={notes} />} />
+        <Route
+          path="/notes"
+          element={<Notes notes={notes} setNotes={setNotes} />}
+        />
+        <Route path="/users" element={<Users />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
       <button onClick={handleLogout}>Logout</button>
-      <Footer />
-    </div>
+    </Router>
   );
 };
 

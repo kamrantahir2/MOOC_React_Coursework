@@ -267,7 +267,10 @@ const App = () => {
             />
           }
         />
-        <Route path="/users" element={<Users />} />
+        <Route
+          path="/users"
+          element={user ? <Users /> : <Navigate replace to="/login" />}
+        />
         <Route path="/" element={<Home user={user.username} />} />
       </Routes>
       <button onClick={handleLogout}>Logout</button>

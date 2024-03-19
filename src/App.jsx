@@ -104,7 +104,7 @@ const App = () => {
     }
   }, []);
 
-  console.log("notes", notes);
+  // console.log("notes", notes);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -176,11 +176,16 @@ const App = () => {
             handlePasswordChange={({ target }) => setPassword(target.value)}
             handleLogin={handleLogin}
           />
-          <button onClick={() => setLoginVisible(false)}>Cancel</button>
+          {/* <button onClick={() => setLoginVisible(false)}>Cancel</button> */}
         </div>
       </div>
     );
   };
+
+  const handleCancel = () => {
+    return setLoginVisible(false);
+  };
+
   const noteFormRef = useRef();
 
   const noteForm = () => {
@@ -276,6 +281,7 @@ const App = () => {
                 handleUsernameChange={({ target }) => setUsername(target.value)}
                 handlePasswordChange={({ target }) => setPassword(target.value)}
                 handleLogin={userLogin}
+                handleCancel={handleCancel}
               />
             }
           />

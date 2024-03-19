@@ -17,6 +17,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { Table } from "react-bootstrap";
 
 const Home = ({ user }) => {
   return (
@@ -29,6 +30,7 @@ const Home = ({ user }) => {
 
 const Note = ({ notes }) => {
   const { id } = useParams();
+
   const note = notes.find((n) => n._id === id);
   return (
     <div>
@@ -50,15 +52,21 @@ const Notes = ({ notes, setNotes }) => {
   return (
     <div>
       <h2>Notes</h2>
-      <ul>
-        {notes.map((note) => {
-          return (
-            <li key={note._id}>
-              <Link to={`/notes/${note._id}`}>{note.content}</Link>
-            </li>
-          );
-        })}
-      </ul>
+      <Table striped>
+        <tbody>
+          {notes.map((note) => {
+            return (
+              <tr key={note._id}>
+                <td>
+                  <Link to={`/notes/${note._id}`}>{note.content}</Link>
+                </td>
+                <td>{note.user.username}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+      <ul></ul>
     </div>
   );
 };
@@ -82,6 +90,7 @@ const App = () => {
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
+      console.log(initialNotes);
       setNotes(initialNotes);
     });
   }, []);
@@ -94,6 +103,8 @@ const App = () => {
       noteService.setToken(user.token);
     }
   }, []);
+
+  console.log("notes", notes);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -229,52 +240,54 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <div>
-        <Link style={padding} to="/">
-          Home
-        </Link>{" "}
-        <Link style={padding} to="/notes">
-          Notes
-        </Link>{" "}
-        <Link style={padding} to="/users">
-          Users
-        </Link>
-        {user ? (
-          <em>{user.username} logged in</em>
-        ) : (
-          <Link style={padding} to="/login">
-            Login
+    <div className="container">
+      <Router>
+        <div>
+          <Link style={padding} to="/">
+            Home
+          </Link>{" "}
+          <Link style={padding} to="/notes">
+            Notes
+          </Link>{" "}
+          <Link style={padding} to="/users">
+            Users
           </Link>
-        )}
-      </div>
+          {user ? (
+            <em>{user.username} logged in</em>
+          ) : (
+            <Link style={padding} to="/login">
+              Login
+            </Link>
+          )}
+        </div>
 
-      <Routes>
-        <Route path="/notes/:id" element={<Note notes={notes} />} />
-        <Route
-          path="/notes"
-          element={<Notes notes={notes} setNotes={setNotes} />}
-        />
-        <Route
-          path="/login"
-          element={
-            <LoginForm
-              username={username}
-              password={password}
-              handleUsernameChange={({ target }) => setUsername(target.value)}
-              handlePasswordChange={({ target }) => setPassword(target.value)}
-              handleLogin={userLogin}
-            />
-          }
-        />
-        <Route
-          path="/users"
-          element={user ? <Users /> : <Navigate replace to="/login" />}
-        />
-        <Route path="/" element={<Home user={user.username} />} />
-      </Routes>
-      <button onClick={handleLogout}>Logout</button>
-    </Router>
+        <Routes>
+          <Route path="/notes/:id" element={<Note notes={notes} />} />
+          <Route
+            path="/notes"
+            element={<Notes notes={notes} setNotes={setNotes} />}
+          />
+          <Route
+            path="/login"
+            element={
+              <LoginForm
+                username={username}
+                password={password}
+                handleUsernameChange={({ target }) => setUsername(target.value)}
+                handlePasswordChange={({ target }) => setPassword(target.value)}
+                handleLogin={userLogin}
+              />
+            }
+          />
+          <Route
+            path="/users"
+            element={user ? <Users /> : <Navigate replace to="/login" />}
+          />
+          <Route path="/" element={<Home user={user.username} />} />
+        </Routes>
+        <button onClick={handleLogout}>Logout</button>
+      </Router>
+    </div>
   );
 };
 

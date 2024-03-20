@@ -18,7 +18,8 @@ import {
 } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Table } from "react-bootstrap";
-import { Alert } from "react-bootstrap";
+import { Alert, Navbar } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 
 const Home = ({ user }) => {
   return (
@@ -254,24 +255,37 @@ const App = () => {
     <div className="container">
       {message && <Alert variant="success">{message}</Alert>}
       <Router>
-        <div>
-          <Link style={padding} to="/">
-            Home
-          </Link>{" "}
-          <Link style={padding} to="/notes">
-            Notes
-          </Link>{" "}
-          <Link style={padding} to="/users">
-            Users
-          </Link>
-          {user ? (
-            <em>{user.username} logged in</em>
-          ) : (
-            <Link style={padding} to="/login">
-              Login
-            </Link>
-          )}
-        </div>
+        <Navbar collapseOnSelect bg="dark" variant="dark" className="p-3">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/">
+                  Home
+                </Link>{" "}
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/notes">
+                  Notes
+                </Link>{" "}
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/users">
+                  Users
+                </Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                {user ? (
+                  <em>{user.username} logged in</em>
+                ) : (
+                  <Link style={padding} to="/login">
+                    Login
+                  </Link>
+                )}
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
 
         <Routes>
           <Route path="/notes/:id" element={<Note notes={notes} />} />

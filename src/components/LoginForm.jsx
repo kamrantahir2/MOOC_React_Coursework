@@ -42,7 +42,7 @@ const LoginForm = (props) => {
             onChange={props.handlePasswordChange}
           />
         </div> */}
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" className="mt-3">
           login
         </Button>
         {/* <button type="submit">Submit</button> */}

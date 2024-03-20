@@ -18,6 +18,7 @@ import {
 } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Table } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
 const Home = ({ user }) => {
   return (
@@ -87,6 +88,7 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
@@ -117,6 +119,10 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
+      setMessage(`Welcome ${user.username}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     } catch (error) {
       setErrorMessage("Wrong Credentials");
       setTimeout(() => {
@@ -210,7 +216,7 @@ const App = () => {
   //   <div>
   //     <h1>Notes</h1>
   //     <Notification message={errorMessage} />
-  //     {user === null ? loginForm() : noteForm()}
+  // {user === null ? loginForm() : noteForm()}
   //     <div>
   //       <button onClick={() => setShowAll(!showAll)}>
   //         show {showAll ? "important" : "all"}
@@ -246,6 +252,7 @@ const App = () => {
 
   return (
     <div className="container">
+      {message && <Alert variant="success">{message}</Alert>}
       <Router>
         <div>
           <Link style={padding} to="/">
